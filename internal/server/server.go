@@ -31,8 +31,10 @@ func New(cfg *config.Config, logger *zap.Logger) *Server {
 		"/health": true,
 	}
 
-	// Apply logging middleware
-	handler := middleware.LoggingMiddleware(logger, excludePaths)(mux)
+	// Apply middleware chain
+	handler := middleware.NoCacheMiddleware(
+		middleware.LoggingMiddleware(logger, excludePaths)(mux),
+	)
 
 	httpServer := &http.Server{
 		Addr:         cfg.Address(),
