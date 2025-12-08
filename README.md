@@ -18,7 +18,7 @@ A simple HTTP server written in Go that displays all HTTP headers from incoming 
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/daroga0002/showheaders.git
 cd showheaders
 
 # Download dependencies
@@ -57,6 +57,50 @@ go run ./cmd/showheaders -port 8080
 |-----------|--------|------------------------------------------|
 | `/`       | GET    | Displays all HTTP headers from request   |
 | `/health` | GET    | Health check endpoint (returns JSON)     |
+
+### Query Parameters
+
+The `/` endpoint supports a `format` query parameter to control the output format:
+
+| Format   | URL Example         | Description                        |
+|----------|---------------------|------------------------------------|
+| (none)   | `/`                 | HTML table (default)               |
+| `json`   | `/?format=json`     | JSON object with all headers       |
+| `plain`  | `/?format=plain`    | Plain text output                  |
+
+#### JSON Format Example
+
+```bash
+curl "http://localhost:8080/?format=json"
+```
+
+```json
+{
+  "method": "GET",
+  "url": "/?format=json",
+  "remote_addr": "127.0.0.1:54321",
+  "headers": {
+    "User-Agent": ["curl/8.0.0"],
+    "Accept": ["*/*"]
+  }
+}
+```
+
+#### Plain Text Format Example
+
+```bash
+curl "http://localhost:8080/?format=plain"
+```
+
+```
+Method: GET
+URL: /?format=plain
+Remote Address: 127.0.0.1:54321
+
+--- Headers ---
+Accept: */*
+User-Agent: curl/8.0.0
+```
 
 ### Health Check Response
 

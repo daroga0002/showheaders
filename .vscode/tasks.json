@@ -1,0 +1,155 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "build",
+                "-o",
+                "showheaders",
+                "./cmd/showheaders"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$go"],
+            "detail": "Build the showheaders application"
+        },
+        {
+            "label": "Build (Linux)",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "build",
+                "-o",
+                "showheaders-linux",
+                "./cmd/showheaders"
+            ],
+            "options": {
+                "env": {
+                    "GOOS": "linux",
+                    "GOARCH": "amd64"
+                }
+            },
+            "group": "build",
+            "problemMatcher": ["$go"],
+            "detail": "Build for Linux (amd64)"
+        },
+        {
+            "label": "Build (Windows)",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "build",
+                "-o",
+                "showheaders.exe",
+                "./cmd/showheaders"
+            ],
+            "options": {
+                "env": {
+                    "GOOS": "windows",
+                    "GOARCH": "amd64"
+                }
+            },
+            "group": "build",
+            "problemMatcher": ["$go"],
+            "detail": "Build for Windows (amd64)"
+        },
+        {
+            "label": "Test",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "test",
+                "./...",
+                "-v"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": ["$go"],
+            "detail": "Run all tests"
+        },
+        {
+            "label": "Test with Coverage",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "test",
+                "./...",
+                "-v",
+                "-coverprofile=coverage.out"
+            ],
+            "group": "test",
+            "problemMatcher": ["$go"],
+            "detail": "Run tests with coverage report"
+        },
+        {
+            "label": "Run",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "run",
+                "./cmd/showheaders"
+            ],
+            "group": "none",
+            "problemMatcher": [],
+            "detail": "Run the application"
+        },
+        {
+            "label": "Run (Custom Port)",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "run",
+                "./cmd/showheaders",
+                "-port",
+                "${input:port}"
+            ],
+            "group": "none",
+            "problemMatcher": [],
+            "detail": "Run the application on a custom port"
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "rm",
+            "args": [
+                "-f",
+                "showheaders",
+                "showheaders-linux",
+                "showheaders-darwin",
+                "showheaders-darwin-arm64",
+                "showheaders.exe",
+                "coverage.out"
+            ],
+            "group": "none",
+            "problemMatcher": [],
+            "detail": "Remove built binaries and coverage files"
+        },
+        {
+            "label": "Tidy Modules",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "mod",
+                "tidy"
+            ],
+            "group": "none",
+            "problemMatcher": [],
+            "detail": "Tidy Go module dependencies"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "port",
+            "type": "promptString",
+            "description": "Port number to run on",
+            "default": "8080"
+        }
+    ]
+}
