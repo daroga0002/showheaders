@@ -1,9 +1,5 @@
 # Binaries
-showheaders
-showheaders-linux
-showheaders-darwin
-showheaders-darwin-arm64
-showheaders.exe
+/showheaders
 *.exe
 *.exe~
 *.dll
@@ -47,3 +43,4 @@ debug
 .env
 .env.local
 .env.*.local
+
