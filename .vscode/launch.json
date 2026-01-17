@@ -8,30 +8,33 @@
             "name": "Launch showheaders",
             "type": "go",
             "request": "launch",
-            "mode": "auto",
+            "mode": "debug",
             "program": "${workspaceFolder}/cmd/showheaders",
             "args": [],
             "env": {},
+            "console": "integratedTerminal",
             "cwd": "${workspaceFolder}"
         },
         {
             "name": "Launch showheaders (Custom Port)",
             "type": "go",
             "request": "launch",
-            "mode": "auto",
+            "mode": "debug",
             "program": "${workspaceFolder}/cmd/showheaders",
             "args": ["-port", "3000"],
             "env": {},
+            "console": "integratedTerminal",
             "cwd": "${workspaceFolder}"
         },
         {
             "name": "Launch showheaders (Localhost Only)",
             "type": "go",
             "request": "launch",
-            "mode": "auto",
+            "mode": "debug",
             "program": "${workspaceFolder}/cmd/showheaders",
             "args": ["-hostname", "localhost", "-port", "8080"],
             "env": {},
+            "console": "integratedTerminal",
             "cwd": "${workspaceFolder}"
         },
         {
