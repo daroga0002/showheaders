@@ -14,6 +14,12 @@ capabilities:
   - deployment-strategies
   - incident-response
   - performance-optimization
+deployment:
+  strategy: kubernetes
+  default:
+    kind: Deployment
+    containerRuntime: containerd
+    manifestsPath: k8s/
 tools:
   - codebase
   - edit/editFiles
@@ -170,6 +176,94 @@ Pyramid Model:
 - **Security tests**: SAST, DAST, dependency scanning
 
 ### Deployment Patterns
+
+#### Kubernetes-First Policy
+
+All deployments MUST target Kubernetes as a containerized Deployment. Prefer immutable images, declarative manifests, and progressive delivery when available.
+
+Required checks before rollout:
+- Image exists in registry (e.g., ghcr.io)
+- Liveness/readiness probes configured
+- Resource requests/limits set
+- Non-root user and minimal base image
+- Rollout strategy supports zero-downtime
+
+Recommended manifest template:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: showheaders
+  labels:
+    app: showheaders
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: showheaders
+  template:
+    metadata:
+      labels:
+        app: showheaders
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        runAsNonRoot: true
+      containers:
+        - name: showheaders
+          image: ghcr.io/daroga0002/showheaders:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: showheaders
+  labels:
+    app: showheaders
+spec:
+  type: ClusterIP
+  selector:
+    app: showheaders
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+```
+
+Rollout commands:
+- Validate: `kubectl apply --server-side --dry-run=client -f k8s/`
+- Apply: `kubectl apply -f k8s/`
+- Watch: `kubectl rollout status deploy/showheaders`
+
 
 **Progressive Rollouts**:
 1. Deploy to canary (1-5% traffic)
@@ -341,9 +435,10 @@ docker buildx build --platform linux/amd64,linux/arm64 -t showheaders:latest .
 # Local test
 ./showheaders -port 8080
 
-# Systemd service
-sudo systemctl start showheaders
-sudo systemctl status showheaders
+# Kubernetes Deployment
+kubectl apply -f k8s/
+kubectl rollout status deploy/showheaders
+kubectl get pods -l app=showheaders
 
 # Health check
 curl http://localhost:8080/health
