@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: showheaders
+  labels:
+    app: showheaders
+  annotations:
+    # Uncomment and configure based on your ingress controller
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx  # Adjust based on your ingress controller
+  rules:
+    - host: showheaders.example.com  # Replace with your domain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: showheaders
+                port:
+                  name: http
+  # Uncomment for TLS/HTTPS
+  # tls:
+  #   - hosts:
+  #       - showheaders.example.com
+  #     secretName: showheaders-tls

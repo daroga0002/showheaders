@@ -1,0 +1,52 @@
+# Binaries
+showheaders
+showheaders-*
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test and coverage files
+*.test
+coverage.out
+coverage.html
+*.coverprofile
+
+# Git
+.git/
+.gitignore
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Documentation
+README.md
+.github/
+
+# Debug files
+debug
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+vendor/
+
+# Go workspace
+go.work

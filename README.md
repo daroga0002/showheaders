@@ -166,7 +166,25 @@ The server handles graceful shutdown when receiving `SIGINT` (Ctrl+C) or `SIGTER
 ### Running Tests
 
 ```bash
+# Run all tests
 go test ./...
+
+# Run tests with coverage
+go test -v -coverprofile=coverage.out ./...
+go tool cover -html=coverage.out
+
+# Run tests with race detector
+go test -race ./...
+```
+
+### Linting
+
+```bash
+# Install golangci-lint (if not installed)
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+# Run linter
+golangci-lint run ./...
 ```
 
 ### Building for Different Platforms
@@ -183,6 +201,90 @@ GOOS=darwin GOARCH=arm64 go build -o showheaders-darwin-arm64 ./cmd/showheaders
 
 # Windows
 GOOS=windows GOARCH=amd64 go build -o showheaders.exe ./cmd/showheaders
+```
+
+## Docker
+
+### Building the Image
+
+```bash
+docker build -t showheaders:latest .
+```
+
+### Running with Docker
+
+```bash
+# Run on port 8080
+docker run -p 8080:8080 showheaders:latest
+
+# Run on custom port
+docker run -p 3000:8080 showheaders:latest -port 8080
+```
+
+### Multi-architecture Build
+
+```bash
+docker buildx build --platform linux/amd64,linux/arm64 -t showheaders:latest .
+```
+
+## Kubernetes Deployment
+
+### Prerequisites
+- Kubernetes cluster (local or remote)
+- kubectl configured
+- Container image pushed to registry (e.g., GHCR)
+
+### Deploy to Kubernetes
+
+```bash
+# Apply deployment and service
+kubectl apply -f k8s/deployment.yaml
+
+# Check deployment status
+kubectl rollout status deployment/showheaders
+
+# Get pods
+kubectl get pods -l app=showheaders
+
+# Test the service
+kubectl port-forward svc/showheaders 8080:80
+```
+
+### Configure Ingress (optional)
+
+```bash
+# Edit k8s/ingress.yaml with your domain
+# Then apply:
+kubectl apply -f k8s/ingress.yaml
+```
+
+## CI/CD
+
+The project includes GitHub Actions workflows:
+
+- **CI Pipeline** (`.github/workflows/ci.yml`): Runs on every push and PR
+  - Tests with multiple Go versions
+  - Linting with golangci-lint
+  - Security scanning with gosec
+  - Cross-platform builds (Linux, macOS, Windows)
+
+- **Release Pipeline** (`.github/workflows/release.yml`): Triggers on version tags
+  - Builds binaries for all platforms
+  - Creates GitHub releases with checksums
+  - Builds and pushes Docker images to GHCR
+  - Supports multi-architecture images (amd64, arm64)
+
+### Creating a Release
+
+```bash
+# Tag a new version
+git tag -a v1.0.0 -m "Release v1.0.0"
+git push origin v1.0.0
+
+# The release workflow will automatically:
+# - Build binaries for all platforms
+# - Create a GitHub release
+# - Build and push Docker images
 ```
 
 ## License
