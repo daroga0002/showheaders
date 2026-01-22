@@ -1,0 +1,16 @@
+.git
+.github
+.vscode
+
+# Local build outputs
+showheaders
+showheaders-*
+*.exe
+coverage.out
+
+# OS / editor
+.DS_Store
+
+# Go
+**/*.test
+**/*.out
