@@ -194,9 +194,9 @@ Recommended manifest template:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: showheaders
+  name: application
   labels:
-    app: showheaders
+    app: application
 spec:
   replicas: 2
   strategy:
@@ -206,11 +206,11 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: showheaders
+      app: application
   template:
     metadata:
       labels:
-        app: showheaders
+        app: application
     spec:
       securityContext:
         runAsUser: 1000
@@ -218,8 +218,8 @@ spec:
         fsGroup: 1000
         runAsNonRoot: true
       containers:
-        - name: showheaders
-          image: ghcr.io/daroga0002/showheaders:latest
+        - name: application
+          image: ghcr.io/daroga0002/application:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -246,13 +246,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: showheaders
+  name: application
   labels:
-    app: showheaders
+    app: application
 spec:
   type: ClusterIP
   selector:
-    app: showheaders
+    app: application
   ports:
     - name: http
       port: 80
@@ -262,7 +262,7 @@ spec:
 Rollout commands:
 - Validate: `kubectl apply --server-side --dry-run=client -f k8s/`
 - Apply: `kubectl apply -f k8s/`
-- Watch: `kubectl rollout status deploy/showheaders`
+- Watch: `kubectl rollout status deploy/application`
 
 
 **Progressive Rollouts**:
@@ -324,7 +324,7 @@ Use the **5 Whys** technique:
 - Relevant log snippets
 - Next diagnostic steps
 
-## Project-Specific Context (showheaders)
+## Project-Specific Context (application)
 
 ### Current State Analysis
 
@@ -372,7 +372,7 @@ Use the **5 Whys** technique:
 10. Performance benchmarks
 11. Chaos engineering tests
 
-## DevOps Checklist (showheaders specific)
+## DevOps Checklist (application specific)
 
 ### Phase 1: Foundation (Current Focus)
 - [x] Version control (Git)
@@ -405,7 +405,7 @@ Use the **5 Whys** technique:
 ### Build & Test
 ```bash
 # Build
-go build -o showheaders ./cmd/showheaders
+go build -o application ./cmd/application
 
 # Test with coverage
 go test ./... -v -coverprofile=coverage.out
@@ -421,24 +421,24 @@ gosec ./...
 ### Container
 ```bash
 # Build image
-docker build -t showheaders:latest .
+docker build -t application:latest .
 
 # Run container
-docker run -p 8080:8080 showheaders:latest
+docker run -p 8080:8080 application:latest
 
 # Multi-arch build
-docker buildx build --platform linux/amd64,linux/arm64 -t showheaders:latest .
+docker buildx build --platform linux/amd64,linux/arm64 -t application:latest .
 ```
 
 ### Deployment
 ```bash
 # Local test
-./showheaders -port 8080
+./application -port 8080
 
 # Kubernetes Deployment
 kubectl apply -f k8s/
-kubectl rollout status deploy/showheaders
-kubectl get pods -l app=showheaders
+kubectl rollout status deploy/application
+kubectl get pods -l app=application
 
 # Health check
 curl http://localhost:8080/health
