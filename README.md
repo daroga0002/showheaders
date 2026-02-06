@@ -1,5 +1,8 @@
 # showheaders
 
+[![CI](https://github.com/daroga0002/showheaders/actions/workflows/ci.yml/badge.svg)](https://github.com/daroga0002/showheaders/actions/workflows/ci.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/daroga0002/showheaders)](https://goreportcard.com/report/github.com/daroga0002/showheaders)
+
 A simple HTTP server written in Go that displays all HTTP headers from incoming requests.
 
 ## Features
@@ -184,6 +187,26 @@ GOOS=darwin GOARCH=arm64 go build -o showheaders-darwin-arm64 ./cmd/showheaders
 # Windows
 GOOS=windows GOARCH=amd64 go build -o showheaders.exe ./cmd/showheaders
 ```
+
+## CI/CD Pipeline
+
+The project includes comprehensive CI/CD automation:
+
+- **Continuous Integration**: Automated testing, linting, and security scanning on every push and PR
+- **Multi-platform Builds**: Automated builds for Linux, macOS, and Windows (amd64/arm64)
+- **Automated Releases**: Tag-based releases with pre-built binaries
+- **Dependency Management**: Automated dependency updates via Dependabot
+
+For detailed CI/CD documentation, see [.github/CI-CD.md](.github/CI-CD.md).
+
+### Creating a Release
+
+```bash
+git tag -a v1.0.0 -m "Release version 1.0.0"
+git push origin v1.0.0
+```
+
+The release pipeline will automatically build binaries for all platforms and create a GitHub release.
 
 ## License
 
