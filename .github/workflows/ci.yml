@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  GO_VERSION: '1.24.3'
+  GO_VERSION: '1.24.13'
 
 jobs:
   # Security: Secret Scanning
@@ -114,7 +114,7 @@ jobs:
 
     strategy:
       matrix:
-        go-version: ['1.24.3']
+        go-version: ['1.24.13']
         os: [ubuntu-latest, macos-latest]
       fail-fast: false
 
