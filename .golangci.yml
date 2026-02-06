@@ -1,0 +1,43 @@
+linters:
+  enable:
+    - gofmt
+    - goimports
+    - govet
+    - errcheck
+    - staticcheck
+    - unused
+    - gosimple
+    - ineffassign
+    - typecheck
+    - gosec
+    - bodyclose
+    - noctx
+    - misspell
+    - unconvert
+    - unparam
+    - whitespace
+    - gocyclo
+    - gocritic
+
+linters-settings:
+  gocyclo:
+    min-complexity: 15
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - performance
+      - style
+  gosec:
+    excludes:
+      - G104  # Allow unhandled errors in some cases
+
+run:
+  timeout: 5m
+  tests: true
+  skip-dirs:
+    - vendor
+
+issues:
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
