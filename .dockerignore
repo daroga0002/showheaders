@@ -1,0 +1,33 @@
+# Git
+.git
+.gitignore
+.github
+
+# Build artifacts
+showheaders
+showheaders-*
+*.exe
+coverage.out
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Testing
+*.test
+*.out
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Dependencies (will be downloaded in Docker build)
+vendor/

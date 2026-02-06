@@ -1,5 +1,8 @@
 # showheaders
 
+[![CI](https://github.com/daroga0002/showheaders/actions/workflows/ci.yml/badge.svg)](https://github.com/daroga0002/showheaders/actions/workflows/ci.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/daroga0002/showheaders)](https://goreportcard.com/report/github.com/daroga0002/showheaders)
+
 A simple HTTP server written in Go that displays all HTTP headers from incoming requests.
 
 ## Features
@@ -152,6 +155,72 @@ The application uses [ZAP](https://github.com/uber-go/zap) for structured JSON l
 ```
 
 **Note:** Health check requests (`/health`) are excluded from logging to reduce noise in production environments.
+
+## CI/CD Pipeline
+
+The project includes a comprehensive GitHub Actions CI/CD pipeline that runs on every push and pull request:
+
+### Pipeline Stages
+
+1. **Security Scanning**
+   - Secret scanning with TruffleHog and Gitleaks
+   - Static Application Security Testing (SAST) with CodeQL
+   - Go-specific security checks with Gosec
+   - Vulnerability scanning with govulncheck
+
+2. **Code Quality**
+   - Linting with golangci-lint
+   - Format checking with gofmt
+   - Dependency verification
+
+3. **Testing**
+   - Unit tests with race detection
+   - Coverage report upload to Codecov
+   - Cross-platform testing (Linux, macOS, Windows)
+
+4. **Building**
+   - Multi-platform builds (Linux, macOS, Windows)
+   - Multi-architecture support (amd64, arm64)
+   - Build artifacts uploaded for 30 days
+
+5. **Docker Image** (main branch only)
+   - Multi-architecture Docker images
+   - Published to GitHub Container Registry (ghcr.io)
+   - Automatic tagging and versioning
+
+6. **Release** (tags only)
+   - Automatic GitHub release creation
+   - All platform binaries attached
+   - SHA256 checksums included
+
+### Running Pipeline Locally
+
+You can run various checks locally before pushing:
+
+```bash
+# Run tests
+go test -v -race ./...
+
+# Run linter
+golangci-lint run
+
+# Check formatting
+gofmt -s -l .
+
+# Build for current platform
+go build -o showheaders ./cmd/showheaders
+
+# Build Docker image
+docker build -t showheaders:local .
+```
+
+### Creating a Release
+
+To create a new release with binaries:
+
+1. Tag your commit: `git tag -a v1.0.0 -m "Release v1.0.0"`
+2. Push the tag: `git push origin v1.0.0`
+3. The pipeline will automatically create a GitHub release with binaries
 
 ## Graceful Shutdown
 
