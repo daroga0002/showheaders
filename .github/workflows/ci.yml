@@ -115,7 +115,7 @@ jobs:
     strategy:
       matrix:
         go-version: ['1.24.3']
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
       fail-fast: false
 
     steps:
@@ -181,11 +181,8 @@ jobs:
 
     strategy:
       matrix:
-        goos: [linux, darwin, windows]
+        goos: [linux, darwin]
         goarch: [amd64, arm64]
-        exclude:
-          - goos: windows
-            goarch: arm64
 
     steps:
       - uses: actions/checkout@v4
